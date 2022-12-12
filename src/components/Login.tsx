@@ -55,11 +55,11 @@ const Login = ({ navigation }: { navigation: any }) => {
       .catch(error => console.log(error.message))
   }
 
-  const image = { uri: "https://reactjs.org/logo-og.png" };
+  const image = { uri: "" };
   return (
       <View style={loginStyle.login}>
-        <ImageBackground source={require('DrivingCalendar/styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
-            width: 250, opacity:0.2 }} />
+        {/* <ImageBackground source={require('')} resizeMode='contain' style={{flex:1, height: 250,
+            width: 250, opacity:0.2 }} /> */}
         <Text
           style={loginStyle.loginHeader}>
           Log in
@@ -91,7 +91,7 @@ const Login = ({ navigation }: { navigation: any }) => {
           ></TextInput>
           <View style={loginStyle.button}>
             <Button
-              onPress={() => login()}
+              onPress={() => navigation.navigate("Instructor")}
               color={"#7464bc"}
               title="Login"
               disabled={buttonDisabled} />
