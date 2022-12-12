@@ -58,6 +58,7 @@ const Login = ({ navigation }: { navigation: any }) => {
   const image = { uri: "" };
   return (
       <View style={loginStyle.login}>
+        
         {/* <ImageBackground source={require('')} resizeMode='contain' style={{flex:1, height: 250,
             width: 250, opacity:0.2 }} /> */}
         <Text
