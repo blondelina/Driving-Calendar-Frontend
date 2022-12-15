@@ -47,9 +47,9 @@ const Login = ({ navigation }: { navigation: any }) => {
       else {
         setItem(response.accessToken);
         if (await decodeItem(response.accessToken) === 'instructor')
-          navigation.navigate("InstructorView")
+          navigation.navigate("Instructor")
         else
-          navigation.navigate("StudentView")
+          navigation.navigate("Student")
       }
     })
       .catch(error => console.log(error.message))
@@ -57,10 +57,9 @@ const Login = ({ navigation }: { navigation: any }) => {
 
   const image = { uri: "" };
   return (
-      <View style={loginStyle.login}>
-        
-        {/* <ImageBackground source={require('')} resizeMode='contain' style={{flex:1, height: 250,
-            width: 250, opacity:0.2 }} /> */}
+      <View style={loginStyle.login}> 
+        <ImageBackground source={require('../styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
+            width: 250, opacity:0.2 }} />
         <Text
           style={loginStyle.loginHeader}>
           Log in
@@ -92,7 +91,7 @@ const Login = ({ navigation }: { navigation: any }) => {
           ></TextInput>
           <View style={loginStyle.button}>
             <Button
-              onPress={() => navigation.navigate("Instructor")}
+              onPress={() => login()}
               color={"#7464bc"}
               title="Login"
               disabled={buttonDisabled} />
