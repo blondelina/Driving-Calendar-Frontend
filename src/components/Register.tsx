@@ -3,33 +3,28 @@ import React, { useEffect, useState } from "react"
 import { View, Text, TextInput, Button, Alert, ImageBackground } from "react-native"
 import { loginStyle } from "../styles/LoginStyles"
 import routes from '../constants/routes.json';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { stat } from "fs";
 
 const Register = ({ navigation }: { navigation: any }) => {
     const [email, setEmail] = useState<string | undefined>("")
     const [username, setUsername] = useState<string | undefined>("")
+    const [firstName, setFirstName] = useState<string | undefined>("")
+    const [lastName, setLastName] = useState<string | undefined>("")
     const [password, setPassword] = useState<string | undefined>("")
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
-    const [value, setValue] = useState(null);
-    const [open, setOpen] = useState(false);
-    const [items, setItems] = useState([
-        { label: 'Instructor', value: 'instructor' },
-        { label: 'Student', value: 'student' }
-    ]);
 
     async function register() {
-        let response = await fetch(routes.BaseURL + "/api/" + value + "s/register", {
+        let response = await fetch(routes.BaseURL + "/api/" + 'student' + "s/register", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'accept': '*/*',
             },
-            body: JSON.stringify({ "username": username, "email": email, "password": password })
+            body: JSON.stringify({ "username": username, "email": email, "password": password, "firstName": firstName, "lastName":lastName })
         });
         let status = response.status
         await response.json().then(response => {
-            if (status !== 201) {
+            console.log(response)
+            if (status === 400) {
                 if(response.errors!=null)
                     Alert.alert(response.errors.Email[0])
                 else
@@ -43,15 +38,15 @@ const Register = ({ navigation }: { navigation: any }) => {
     }
 
     useEffect(() => {
-        if (username != "" && password != "" && email != "" && value != null)
+        if (username != "" && password != "" && email != "" && lastName != "" && firstName != "")
             setButtonDisabled(false)
         else
             setButtonDisabled(true)
-    }, [username, password, email, value])
+    }, [username, password, email, lastName, firstName])
 
     return (
         <View style={loginStyle.login}>
-            <ImageBackground source={require('DrivingCalendar/styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
+            <ImageBackground source={require('../styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
             width: 250, opacity:0.2 }} />
             <Text
                 style={loginStyle.loginHeader}>
@@ -68,6 +63,28 @@ const Register = ({ navigation }: { navigation: any }) => {
                     placeholder="email"
                     placeholderTextColor="#000000"
                     onChangeText={newText => setEmail(newText)}
+                ></TextInput>
+                <Text
+                style={loginStyle.labels}>
+                    First name:
+                </Text>
+                <TextInput
+                    value={firstName}
+                    style={loginStyle.textbox}
+                    placeholder="first name"
+                    placeholderTextColor="#000000"
+                    onChangeText={newText => setFirstName(newText)}
+                ></TextInput>
+                <Text
+                style={loginStyle.labels}>
+                   Last name:
+                </Text>
+                <TextInput
+                    value={lastName}
+                    style={loginStyle.textbox}
+                    placeholder="last name"
+                    placeholderTextColor="#000000"
+                    onChangeText={newText => setLastName(newText)}
                 ></TextInput>
                 <Text
                 style={loginStyle.labels}>
@@ -92,20 +109,6 @@ const Register = ({ navigation }: { navigation: any }) => {
                     value={password}
                     onChangeText={newText => setPassword(newText)}
                 ></TextInput>
-                <Text
-                style={loginStyle.labels}>
-                    Role:
-                </Text>
-                <DropDownPicker
-                    style={loginStyle.rolesDropdown}
-                    placeholder={'Select a role'}
-                    items={items}
-                    setItems={setItems}
-                    value={value}
-                    setValue={setValue}
-                    open={open}
-                    setOpen={setOpen}
-                />
                 <View style={loginStyle.button}>
                     <Button
                         onPress={() => register()}
