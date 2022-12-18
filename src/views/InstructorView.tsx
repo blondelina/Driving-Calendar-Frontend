@@ -5,6 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import apiConstants from '../constants/apiConstants';
 import { getItem, removeItem } from '../utils/TokenHandler';
+import { instructorStyle } from '../styles/InstructorStyle';
 
 const InstructorView = ({ navigation }: { navigation: any }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -90,19 +91,13 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
     setFormattedEndDate(changedDate);
   }, [, endDate]);
 
-  const signOut = async () => {
-    removeItem()
-    console.log(getItem())
-    navigation.navigate("Login")
-  }
-
   return (
     <View>
       <Modal
         animationType="fade"
         visible={modalVisible}
         onRequestClose={() => setModalVisible(!modalVisible)}>
-        <View>
+        <View style={instructorStyle.instructorView}>
           <Text>Pick start date and time.</Text>
           <DateTimePicker
             value={startDate}
@@ -114,7 +109,7 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
           <Text>Pick end date and time.</Text>
           <DateTimePicker
             value={endDate}
-            onChange={(e, date) => {
+            onChange={date => {
               console.log(date)
             }}
             textColor="#000000"
@@ -138,8 +133,8 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
           />
         </View>
       </Modal>
-
       <Calendar
+        style={instructorStyle.calendarStyle}
         markingType={'period'}
         markedDates={
           changePeriodOk
@@ -149,14 +144,15 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
             )
             : pastMarkedDates
         }></Calendar>
-      <Button
-        title="Manage schedule"
-        onPress={() => setModalVisible(!modalVisible)}
-      />
-      <Button
-        title="Sign out"
-        onPress={()=>signOut()}
-      />
+
+      <View style={instructorStyle.buttonsViewStyle}>
+        <Button
+          color={"#7464bc"}
+          title="Manage schedule"
+          onPress={() => setModalVisible(!modalVisible)}
+        />
+      </View>
+
     </View>
   );
 };

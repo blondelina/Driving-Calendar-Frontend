@@ -45,7 +45,7 @@ const Register = ({ navigation }: { navigation: any }) => {
     }, [username, password, email, lastName, firstName])
 
     return (
-        <View style={loginStyle.login}>
+        <View style={loginStyle.register}>
             <ImageBackground source={require('../styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
             width: 250, opacity:0.2 }} />
             <Text

@@ -12,7 +12,7 @@ import {
 
 import { loginStyle } from '../styles/LoginStyles'
 import { Link } from '@react-navigation/native';
-import { decodeItem, setItem } from '../utils/TokenHandler';
+import { decodeItemRole, setItem } from '../utils/TokenHandler';
 
 const Login = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState<string | undefined>("")
@@ -46,7 +46,7 @@ const Login = ({ navigation }: { navigation: any }) => {
       }
       else {
         setItem(response.accessToken);
-        if (await decodeItem(response.accessToken) === 'instructor')
+        if (await decodeItemRole(response.accessToken) === 'instructor')
           navigation.navigate("Instructor")
         else
           navigation.navigate("Student")
