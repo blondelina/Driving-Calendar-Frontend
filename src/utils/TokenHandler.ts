@@ -14,7 +14,12 @@ export async function removeItem() {
   return AsyncStorage.clear();
 }
 
-export async function decodeItem(value: any) {
+export async function decodeItemRole(value: any) {
     var decoded = jwt_decode<any>(value);
     return decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+}
+
+export async function decodeItemId(value: any) {
+  var decoded = jwt_decode<any>(value);
+  return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 }

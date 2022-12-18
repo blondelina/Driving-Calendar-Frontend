@@ -11,6 +11,13 @@ const loginStyle = StyleSheet.create({
     alignItems: 'center',
     height: '85%',
   },
+  register:{
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '95%',
+  },
   textbox: {
     borderBottomColor: 'black',
     borderBottomWidth: 2,

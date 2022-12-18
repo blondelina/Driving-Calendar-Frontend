@@ -1,24 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import InstructorView from './src/views/InstructorView';
+import { StyleSheet} from 'react-native';
 import StudentView from './src/views/StudentView';
 import Login from './src/components/Login';
 import Register from './src/components/Register';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator} from '@react-navigation/native-stack';
+import InstructorTabNavigator from './src/components/InstructorTabNavigator';
 
 
 const Stack = createNativeStackNavigator();
-
 
 function App() {
   return (
     <NavigationContainer>
       <StatusBar></StatusBar>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Instructor" component={InstructorView} />
+        <Stack.Screen name="Instructor" component={InstructorTabNavigator} />
         <Stack.Screen name="Student" component={StudentView} />
       </Stack.Navigator>
     </NavigationContainer>
