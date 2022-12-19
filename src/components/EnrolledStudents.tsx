@@ -34,16 +34,16 @@ const EnrolledStudents = ({ navigation }: { navigation: any }) => {
                 }}
                 color={"#7464bc"}
             ></Button>
-            <Text>Current enrolled students:</Text>
+            <Text style={instructorStyle.headerStyle}>Current enrolled students:</Text>
             
             {students.length === 0 ?
                 <View>
-                    <Text>No students added</Text>
+                    <Text style={instructorStyle.headerStyle}>No students added</Text>
                 </View> :
                 <View style={instructorStyle.studentList}>
                     <FlatList
                         data={students as any}
-                        renderItem={({item}) => <Text>{item['studentName']}</Text>}
+                        renderItem={({item}) => <Text style={instructorStyle.studentElement}>{item['studentName']}</Text>}
                     />
                 </View>
             }

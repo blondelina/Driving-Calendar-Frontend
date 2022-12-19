@@ -30,12 +30,13 @@ const instructorStyle = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-        height: '85%'
+        marginTop: '15%',
+        marginBottom: '3%',
     },
     textboxStyle: {
         borderColor: 'black',
         borderWidth: 2,
-        borderRadius: 10,
+        borderRadius: 10, 
         backgroundColor: 'white',
         padding: 10,
         textAlign: 'left',
@@ -47,8 +48,27 @@ const instructorStyle = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-        height: '50%'
+        height: '57%'
     },
+    studentElement:{
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding:10,
+        margin: 5,
+        borderRadius: 5,
+        backgroundColor: 'white'
+    },
+    textContent:{
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    headerStyle:{
+        fontSize:20,
+        fontWeight: 'bold',
+        padding:20
+    }
 });
 
 export { instructorStyle }
