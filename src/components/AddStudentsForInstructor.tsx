@@ -1,14 +1,35 @@
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Button, Alert, FlatList } from "react-native";
 import { instructorStyle } from "../styles/InstructorStyle";
 import { decodeItemId, getItem } from "../utils/TokenHandler";
 import routes from '../constants/routes.json';
 import { useEffect, useState } from "react";
 
 const AddStudentsForInstructor = ({ navigation }: { navigation: any }) => {
-    const [studentId, setStudentId] = useState<string | undefined>("")
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
+    const [students, setStudents] = useState<string | undefined>("");
 
-    function addStudent() {
+    useEffect(() => {
+        getStudents()
+    }, [])
+    function getStudents() {
+        getItem().then(result => fetch(routes.BaseURL + "/students", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+                'Authorization': 'Bearer ' + result,
+            },
+        }
+        ).then(response =>
+            response.json()
+        ).then(response => {
+            console.log(response)
+            setStudents(response)
+        })
+            .catch(error => console.log(error)))
+    }
+
+    function addStudent(studentId) {
         getItem().then(result => decodeItemId(result).then(instructorId => fetch(routes.BaseURL + "/api/instructors/" + instructorId + "/student", {
             method: "POST",
             headers: {
@@ -33,28 +54,21 @@ const AddStudentsForInstructor = ({ navigation }: { navigation: any }) => {
             .catch(error => console.log(error))))
     }
 
-    useEffect(() => {
-        if (studentId != "")
-            setButtonDisabled(false)
-        else
-            setButtonDisabled(true)
-    }, [studentId])
 
     return (
         <View style={instructorStyle.instructorSearch}>
-            <Text>Search students:</Text>
-            <TextInput
-                value={studentId}
-                style={instructorStyle.textboxStyle}
-                placeholder="enter student id..."
-                placeholderTextColor="#000000"
-                onChangeText={newText => setStudentId(newText)}
-            ></TextInput>
-            <Button
-                color={"#7464bc"}
-                title="Confirm"
-                disabled={buttonDisabled}
-                onPress={() => addStudent()}
+            <Text style={instructorStyle.headerStyle}>Add students:</Text>
+            <FlatList
+                data={students as any}
+                renderItem={({ item }) => 
+                <View style={instructorStyle.studentElement}>
+                    <View style={instructorStyle.textContent}>
+                        <Text style={{padding:5}}><Text style={{fontWeight:'bold'}}>Username: </Text>{item['studentUserName']}</Text>
+                        <Text style={{padding:5}}><Text>Full name: </Text>{item['studentName']}</Text>
+                    </View>
+                    <Button title="Add" onPress={()=>addStudent(item['studentId'])} color={"#7464bc"}></Button>
+                </View>
+            }
             />
         </View>
     )
