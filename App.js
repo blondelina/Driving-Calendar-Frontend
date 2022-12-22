@@ -16,7 +16,7 @@ function App() {
       <StatusBar></StatusBar>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />

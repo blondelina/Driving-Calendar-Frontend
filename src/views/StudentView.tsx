@@ -1,5 +1,7 @@
+import { StatusBar } from "expo-status-bar"
 import React from "react"
-import { View,Text, Button } from "react-native"
+import { View, Text, Button, Modal } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { getItem, removeItem } from '../utils/TokenHandler'
 
 const StudentView = ({ navigation }: { navigation: any }) => {
@@ -7,15 +9,18 @@ const StudentView = ({ navigation }: { navigation: any }) => {
         removeItem()
         console.log(getItem())
         navigation.navigate("Login")
-      }
-    return(
-        <View>
-            <Text>Student view</Text>
-            <Button
-             title="Sign out"
-             onPress={()=>signOut()}
-             ></Button>
-        </View>
+    }
+    return (
+        <SafeAreaView>
+            <StatusBar></StatusBar>
+            <Modal>
+                <Text>test</Text>
+                <Button
+                    title="Sign out"
+                    onPress={() => signOut()}
+                ></Button>
+            </Modal>
+        </SafeAreaView>
     )
 }
 

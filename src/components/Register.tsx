@@ -1,8 +1,9 @@
 import { Link } from "@react-navigation/native"
-import React, { useEffect, useState } from "react"
-import { View, Text, TextInput, Button, Alert, ImageBackground } from "react-native"
+import React, { useEffect, useState, useRef } from "react"
+import { View, Text, TextInput, Button, Alert, ImageBackground, ScrollView } from "react-native"
 import { loginStyle } from "../styles/LoginStyles"
 import routes from '../constants/routes.json';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Register = ({ navigation }: { navigation: any }) => {
     const [email, setEmail] = useState<string | undefined>("")
@@ -13,7 +14,7 @@ const Register = ({ navigation }: { navigation: any }) => {
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
 
     async function register() {
-        let response = await fetch(routes.BaseURL + "/api/" + 'student' + "s/register", {
+        let response = await fetch(routes.BaseURL + "/api" + '/students' + "/register", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ const Register = ({ navigation }: { navigation: any }) => {
     }, [username, password, email, lastName, firstName])
 
     return (
-        <View style={loginStyle.register}>
+        <SafeAreaView style={loginStyle.register}>
             <ImageBackground source={require('../styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
             width: 250, opacity:0.2 }} />
             <Text
@@ -119,7 +120,7 @@ const Register = ({ navigation }: { navigation: any }) => {
                 </View>
                 <Link to={'/Login'} children={"Already have an account?"} style={loginStyle.linkToRegister}></Link>
             </View>
-        </View>
+        </SafeAreaView>
 
     )
 }
