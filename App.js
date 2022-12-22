@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet} from 'react-native';
 import StudentView from './src/views/StudentView';
-import Login from './src/components/Login';
-import Register from './src/components/Register';
+import Login from './src/views/Login';
+import Register from './src/views/Register';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator} from '@react-navigation/native-stack';
 import InstructorTabNavigator from './src/components/InstructorTabNavigator';

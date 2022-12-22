@@ -9,9 +9,9 @@ const loginStyle = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    height: '85%',
+    height: '70%',
   },
-  register:{
+  register: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -19,34 +19,37 @@ const loginStyle = StyleSheet.create({
     height: '95%',
   },
   textbox: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
-    padding: 10,
-    textAlign: 'left',
-    margin: 10,
-    width: 200
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    paddingBottom: 10,
+    marginBottom: 15,
   },
-  button:{
-    padding: 10
+  registerbox: {
+    flexDirection: 'row',
+    paddingBottom: 10,
+    marginBottom: 15,
   },
-  loginHeader:{
+  button: {
+    padding: 20,
+    textAlign:'center',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  loginHeader: {
     fontSize: 35,
-    padding: 50,
+    marginBottom: 30,
+    textAlign:'center',
     color: 'black',
     fontWeight: 'bold'
   },
-  linkToRegister:{
+  linkToRegister: {
     padding: 15,
     textAlign: 'center',
     borderTopWidth: 0.5,
     marginTop: 10
   },
-  rolesDropdown:{
-    padding: 10,
-    margin: 10,
-    width: 200
-  },
-  labels:{
+  labels: {
     color: 'black',
     fontWeight: 'bold'
   }
