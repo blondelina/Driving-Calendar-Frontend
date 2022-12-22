@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 
 import {
   View,
-  Button,
   Text,
   TextInput,
-  ImageBackground
+  ImageBackground,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 
 import { loginStyle } from '../../styles/LoginStyles'
 import { Link } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../contexts/AuthProvider';
 
 const Login = () => {
@@ -22,48 +26,49 @@ const Login = () => {
   }
 
   return (
-      <View style={loginStyle.login}> 
-        <ImageBackground source={require('../../styles/backgroundCar.png')} resizeMode='contain' style={{flex:1, height: 250,
-            width: 250, opacity:0.2 }} />
-        <Text
-          style={loginStyle.loginHeader}>
-          Log in
+    <SafeAreaView style={loginStyle.login}>
+      <ImageBackground source={require('../../styles/backgroundCar.png')} resizeMode='contain' style={{
+        flex: 1, height: 250,
+        width: 250, opacity: 0.2
+      }} />
+      <View>
+        <Text style={loginStyle.loginHeader}>
+          Login
         </Text>
-        <View>
-          <Text
-            style={loginStyle.labels}
+
+        <View style={loginStyle.textbox}>
+          <MaterialIcons name="email" size={20}></MaterialIcons>
+          <TextInput
+            placeholder='Email'
+            style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} keyboardType="email-address"
+            onChangeText={value => setEmail(value)}
+          ></TextInput>
+        </View>
+
+        <View style={loginStyle.textbox}>
+          <MaterialIcons name="lock" size={20}></MaterialIcons>
+          <TextInput
+            blurOnSubmit={false}
+            placeholder='Password'
+            style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }}
+            secureTextEntry
+            onChangeText={value => setPassword(value)}
           >
-            Email:
-          </Text>
-          <TextInput
-            value={email}
-            style={loginStyle.textbox}
-            placeholder="email"
-            placeholderTextColor="#000000"
-            onChangeText={newText => setEmail(newText)}
-          ></TextInput>
-          <Text
-          style={loginStyle.labels}>
-            Password:
-          </Text>
-          <TextInput
-            style={loginStyle.textbox}
-            placeholder="password"
-            secureTextEntry={true}
-            placeholderTextColor="#000000"
-            value={password}
-            onChangeText={newText => setPassword(newText)}
-          ></TextInput>
-          <View style={loginStyle.button}>
-            <Button
-              onPress={login}
-              color={"#7464bc"}
-              title="Login"
-              disabled={email === "" || password === ""} />
-          </View>
-          <Link to={'/Register'} children={"Don't have an account?"} style={loginStyle.linkToRegister}></Link>
+          </TextInput>
+          <TouchableOpacity onPress={() => { }} >
+            <Text style={{ color: '#795F80' }}>Forgot password?</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={login} style={{ backgroundColor: '#795F80', borderRadius: 10, marginBottom: 20 }}>
+          <Text style={loginStyle.button}>Login</Text>
+        </TouchableOpacity>
+
+        <View style={loginStyle.registerbox}>
+          <Text style={{ paddingRight: 10 }}>Don't have an account?</Text>
+          <Link to={'/Register'} children={"Register here "} style={{ color: '#795F80' }}></Link>
         </View>
       </View>
+    </SafeAreaView >
 
   );
 };

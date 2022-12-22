@@ -1,10 +1,11 @@
+import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Alert } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { useAuth } from "../contexts/AuthProvider";
-import Register from "../Register";
-import Login from "../views/LoginView";
+import RegisterView from "../views/RegisterView";
+import LoginView from "../views/LoginView";
 import { Roles } from '../../constants/constants';
 import StudentView from "../views/StudentView";
 import InstructorTabNavigator from "../InstructorTabNavigator";
@@ -24,8 +25,8 @@ export const Router = () => {
     if(!authData?.jwt) {
       return (
         <>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Login" component={LoginView} />
+          <Stack.Screen name="Register" component={RegisterView} />
         </>
       );
     }
@@ -44,7 +45,11 @@ export const Router = () => {
   return (
     <NavigationContainer>
         <StatusBar></StatusBar>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false
+          }}
+        >
           {renderStack()}
         </Stack.Navigator>
     </NavigationContainer>
