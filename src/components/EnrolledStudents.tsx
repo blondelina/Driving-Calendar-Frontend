@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, Button, FlatList, VirtualizedList } from "react-native"
 import { instructorStyle } from "../styles/InstructorStyle";
-import routes from '../constants/routes.json';
-import { decodeItemId, getItem } from "../utils/TokenHandler";
+import { Api } from '../constants/constants';
+import { getUserId, getJwt } from "../utils/AuthUtils";
 
 const EnrolledStudents = ({ navigation }: { navigation: any }) => {
     const [students, setStudents] = useState<string | undefined>("")
     const [refresh, setRefresh] = useState<boolean>(false)
 
     useEffect(() => {
-        getItem().then(result => decodeItemId(result).then(instructorId => fetch(routes.BaseURL + "/api/instructors/" + instructorId + "/students", {
+        getJwt().then(result => getUserId().then(instructorId => fetch(Api.BaseURL + "/api/instructors/" + instructorId + "/students", {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',

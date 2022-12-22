@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Button, Alert, FlatList } from "react-native";
 import { instructorStyle } from "../styles/InstructorStyle";
-import { decodeItemId, getItem } from "../utils/TokenHandler";
-import routes from '../constants/routes.json';
+import { getUserId, getJwt } from "../utils/AuthUtils";
+import { Api } from '../constants/constants';
 import { useEffect, useState } from "react";
 
 const AddStudentsForInstructor = ({ navigation }: { navigation: any }) => {
@@ -12,7 +12,7 @@ const AddStudentsForInstructor = ({ navigation }: { navigation: any }) => {
         getStudents()
     }, [])
     function getStudents() {
-        getItem().then(result => fetch(routes.BaseURL + "/students", {
+        getJwt().then(result => fetch(Api.BaseURL + "/students", {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const AddStudentsForInstructor = ({ navigation }: { navigation: any }) => {
     }
 
     function addStudent(studentId) {
-        getItem().then(result => decodeItemId(result).then(instructorId => fetch(routes.BaseURL + "/api/instructors/" + instructorId + "/student", {
+        getJwt().then(result => getUserId().then(instructorId => fetch(Api.BaseURL + "/api/instructors/" + instructorId + "/student", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

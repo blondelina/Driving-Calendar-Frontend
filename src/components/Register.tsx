@@ -2,7 +2,7 @@ import { Link } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { View, Text, TextInput, Button, Alert, ImageBackground } from "react-native"
 import { loginStyle } from "../styles/LoginStyles"
-import routes from '../constants/routes.json';
+import { Api } from '../constants/constants';
 
 const Register = ({ navigation }: { navigation: any }) => {
     const [email, setEmail] = useState<string | undefined>("")
@@ -13,7 +13,7 @@ const Register = ({ navigation }: { navigation: any }) => {
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
 
     async function register() {
-        let response = await fetch(routes.BaseURL + "/api/" + 'student' + "s/register", {
+        let response = await fetch(Api.BaseURL + '/student' + "s/register", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

@@ -1,20 +1,19 @@
 import React from "react"
 import { Button, View } from "react-native"
 import { instructorStyle } from "../styles/InstructorStyle"
-import { getItem, removeItem } from "../utils/TokenHandler"
+import { useAuth } from "./contexts/AuthProvider"
 
 const Settings = ({ navigation }: { navigation: any }) => {
-    const signOut = async () => {
-        removeItem()
-        console.log(getItem())
-        navigation.navigate("Login")
+    const { logOutAsync } = useAuth();
+    const logOut = async () => {
+        await logOutAsync();
     }
     return (
         <View style={instructorStyle.instructorView}>
             <Button
                 color={"#7464bc"}
                 title="Sign out"
-                onPress={() => signOut()}
+                onPress={logOut}
             />
         </View>
     )
