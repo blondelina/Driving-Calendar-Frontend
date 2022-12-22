@@ -3,9 +3,9 @@ import { View, Text, Modal, Button } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import apiConstants from '../constants/apiConstants';
-import { getItem, removeItem } from '../utils/TokenHandler';
-import { instructorStyle } from '../styles/InstructorStyle';
+import { Api } from '../../constants/constants';
+import { getJwt, logout } from '../../utils/AuthUtils';
+import { instructorStyle } from '../../styles/InstructorStyle';
 
 const InstructorView = ({ navigation }: { navigation: any }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,8 +17,8 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
   const [pastMarkedDates, setPastMarkedDates] = useState({});
 
   async function postData() {
-    getItem().then(result =>
-      fetch(apiConstants.BaseURL + "/api/users/4/availabilities", {
+    getJwt().then(result =>
+      fetch(Api.BaseURL + "/api/users/4/availabilities", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

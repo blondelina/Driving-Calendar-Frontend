@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   ScrollView
 } from "react-native"
-import { loginStyle } from "../styles/LoginStyles"
-import routes from '../constants/routes.json';
+import { loginStyle } from "../../styles/LoginStyles"
+import { Api } from '../../constants/constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Register = ({ navigation }: { navigation: any }) => {
@@ -24,7 +24,7 @@ const Register = ({ navigation }: { navigation: any }) => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
 
   async function register() {
-    let response = await fetch(routes.BaseURL + "/api/" + 'student' + "s/register", {
+    let response = await fetch(Api.BaseURL + '/students' + "/register", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -56,8 +56,8 @@ const Register = ({ navigation }: { navigation: any }) => {
   }, [username, password, email, lastName, firstName])
 
   return (
-    <SafeAreaView style={loginStyle.login}>
-      <ImageBackground source={require('../styles/backgroundCar.png')} resizeMode='contain' style={{
+    <SafeAreaView style={loginStyle.register}>
+      <ImageBackground source={require('../../styles/backgroundCar.png')} resizeMode='contain' style={{
         flex: 1, height: 250,
         width: 250, opacity: 0.2
       }} />

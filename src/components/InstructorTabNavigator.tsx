@@ -1,7 +1,7 @@
 import ManageStudents from './EnrolledStudents';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import InstructorView from '../views/InstructorView';
+import InstructorView from './views/InstructorView';
 import React from 'react';
 import Settings from './Settings';
 import AddStudentsForInstructor from './AddStudentsForInstructor';
