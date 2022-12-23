@@ -1,77 +1,54 @@
-import { View, Text, TextInput, Button, Alert, FlatList } from "react-native";
+import { View, Text, Button, Alert, FlatList } from "react-native";
 import { instructorStyle } from "../styles/InstructorStyle";
 import { getUserId, getJwt } from "../utils/AuthUtils";
 import { Api } from '../constants/constants';
 import { useEffect, useState } from "react";
+import React from "react";
+import { getAxios } from "../config/AxiosConfig";
 
-const AddStudentsForInstructor = ({ navigation }: { navigation: any }) => {
-    const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
+const AddStudentsForInstructor = () => {
     const [students, setStudents] = useState<string | undefined>("");
 
     useEffect(() => {
         getStudents()
     }, [])
-    function getStudents() {
-        getJwt().then(result => fetch(Api.BaseURL + "/students", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': '*/*',
-                'Authorization': 'Bearer ' + result,
-            },
-        }
-        ).then(response =>
-            response.json()
-        ).then(response => {
-            console.log(response)
-            setStudents(response)
-        })
-            .catch(error => console.log(error)))
+
+    async function getStudents() {
+        const jwt = await getJwt();
+        const axios = await getAxios();
+        const response = await axios.get(Api.Routes.GetStudents, { headers: { 'Authorization': 'Bearer ' + jwt } })
+        setStudents(response.data)
     }
 
-    function addStudent(studentId) {
-        getJwt().then(result => getUserId().then(instructorId => fetch(Api.BaseURL + "/api/instructors/" + instructorId + "/student", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': '*/*',
-                'Authorization': 'Bearer ' + result,
-            },
-            body: JSON.stringify({ "studentId": studentId })
-        }
-        ).then(async response => {
-            const responseText = await response.text()
-            if (response.status !== 200) {
-                if (responseText.length === 0)
-                    Alert.alert("User cannot be added!")
-                else
-                    Alert.alert(responseText)
-            }
-            else {
-                Alert.alert("Student added!")
-            }
-        })
-            .catch(error => console.log(error))))
+    async function addStudent(studentId) {
+        const jwt = await getJwt();
+        const id = await getUserId();
+        const axios = await getAxios();
+
+        axios.post("/instructors/" + id + "/student", { studentId }, { headers: { 'Authorization': 'Bearer ' + jwt } }).then(res => {
+            Alert.alert("Student added!")
+        }).catch(error => {console.log(error)
+            Alert.alert("User cannot be added!")
+        });
     }
 
-
-    return (
-        <View style={instructorStyle.instructorSearch}>
-            <Text style={instructorStyle.headerStyle}>Add students:</Text>
-            <FlatList
-                data={students as any}
-                renderItem={({ item }) => 
+return (
+    <View style={instructorStyle.instructorSearch}>
+        <Text style={instructorStyle.headerStyle}>Add students:</Text>
+        <FlatList
+            data={students as any}
+            renderItem={({ item }) =>
                 <View style={instructorStyle.studentElement}>
                     <View style={instructorStyle.textContent}>
-                        <Text style={{padding:5}}><Text style={{fontWeight:'bold'}}>Username: </Text>{item['studentUserName']}</Text>
-                        <Text style={{padding:5}}><Text>Full name: </Text>{item['studentName']}</Text>
+                        <Text style={{ padding: 5 }}><Text style={{ fontWeight: 'bold' }}>Username: </Text>{item['studentUserName']}</Text>
+                        <Text style={{ padding: 5 }}><Text>Full name: </Text>{item['studentName']}</Text>
                     </View>
-                    <Button title="Add" onPress={()=>addStudent(item['studentId'])} color={"#7464bc"}></Button>
+                    <Button title="Add" onPress={() => addStudent(item['studentId'])} color={"#7464bc"}></Button>
                 </View>
             }
-            />
-        </View>
-    )
+        />
+    </View>
+)
 }
 
 export default AddStudentsForInstructor;

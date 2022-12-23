@@ -32,7 +32,9 @@ export const Router = () => {
     }
 
     switch(authData.role) {
+      
       case Roles.Student:
+        
         return <Stack.Screen name="Student" component={StudentView} />;
       case Roles.Instructor:
         return <Stack.Screen name="Instructor" component={InstructorTabNavigator} />;
