@@ -1,8 +1,8 @@
-import secureStore from 'expo-secure-store';
+import * as secureStore from 'expo-secure-store';
 import jwt_decode from 'jwt-decode';
 import { Api } from '../constants/constants';
 
-const jwtKey = "jwt";
+const jwtKey = "AuthData";
 
 export async function isUserLoggedIn(): Promise<boolean> {
   return !!(await getJwt()) 
@@ -13,7 +13,7 @@ export async function login(jwt: string): Promise<void> {
 }
 
 export async function getJwt() : Promise<string> {
-  return await secureStore.getItemAsync(jwtKey);
+  return JSON.parse(await secureStore.getItemAsync(jwtKey))["jwt"];
 }
 
 export async function logout() : Promise<void> {

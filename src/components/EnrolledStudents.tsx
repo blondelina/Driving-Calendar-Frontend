@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, Button, FlatList, VirtualizedList } from "react-native"
 import { instructorStyle } from "../styles/InstructorStyle";
-import { Api } from '../constants/constants';
 import { getUserId, getJwt } from "../utils/AuthUtils";
+import { getAxios } from "../config/AxiosConfig";
 
-const EnrolledStudents = ({ navigation }: { navigation: any }) => {
+const EnrolledStudents = () => {
     const [students, setStudents] = useState<string | undefined>("")
     const [refresh, setRefresh] = useState<boolean>(false)
 
     useEffect(() => {
-        getJwt().then(result => getUserId().then(instructorId => fetch(Api.BaseURL + "/api/instructors/" + instructorId + "/students", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': '*/*',
-                'Authorization': 'Bearer ' + result,
-            }
-        }).then(
-            response => response.json()
-        ).then(async response => {
-            setStudents(response)
-            console.log(students)
-        })
-            .catch(error => console.log(error.message))))
+        getStudents()
     }, [refresh,]);
+    
+    async function getStudents() {
+        const jwt = await getJwt();
+        const id = await getUserId();
+        const axios = await getAxios();
+        const response = await axios.get("/instructors/"+id+"/students", { headers: { 'Authorization': 'Bearer ' + jwt } })
+        setStudents(response.data)
+    }
 
     return (
         <View style={instructorStyle.instructorView}>

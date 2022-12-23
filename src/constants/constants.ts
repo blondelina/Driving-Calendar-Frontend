@@ -4,7 +4,8 @@ const Api = {
     RoleClaim: "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
     Routes: {
         Login: `login`,
-        StudentRegister: "students/register"
+        StudentRegister: "students/register",
+        GetStudents: "/students"
     }
 };
 
