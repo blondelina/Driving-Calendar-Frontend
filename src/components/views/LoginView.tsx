@@ -13,16 +13,20 @@ import { loginStyle } from '../../styles/LoginStyles'
 import { Link } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../contexts/AuthProvider';
+import { useAxios } from '../../config/AxiosConfig';
+import { LoginResponse } from '../../models/responses/LoginResponse';
+import { Api } from '../../constants/constants';
 
 const Login = () => {
   const [email, setEmail] = useState<string | undefined>("");
   const [password, setPassword] = useState<string | undefined>("");
   const { logInAsync } = useAuth();
+  const axios = useAxios();
 
   async function login() {
-    await logInAsync(email, password);
+    const response = await axios.post<LoginResponse>(Api.Routes.Login, { email, password });
+    await logInAsync(response.data);
   }
 
   return (

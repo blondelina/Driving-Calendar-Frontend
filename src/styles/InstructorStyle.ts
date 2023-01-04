@@ -7,8 +7,7 @@ const instructorStyle = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
-        alignItems: 'center',
-        height: '85%'
+        alignItems: 'center'
     },
     buttonsViewStyle: {
         display: 'flex',
@@ -45,17 +44,14 @@ const instructorStyle = StyleSheet.create({
     },
     studentList: {
         display: 'flex',
-        justifyContent: 'center',
         flexDirection: 'column',
-        alignItems: 'center',
-        height: '57%'
     },
     studentElement:{
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        padding:10,
+        padding: 10,
         margin: 5,
         borderRadius: 5,
         backgroundColor: 'white'

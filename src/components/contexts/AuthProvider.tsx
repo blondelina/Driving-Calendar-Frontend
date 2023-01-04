@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthContextData, AuthData } from '../../models/AuthContextModels';
 import * as secureStore from 'expo-secure-store';
-import { getAxios } from '../../config/AxiosConfig';
-import { Api } from '../../constants/constants';
 import { LoginResponse } from '../../models/responses/LoginResponse';
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -24,26 +22,21 @@ const AuthProvider = ({children}) => {
             setAuthData(_authData);
           }
         } catch (error) {
+            console.log(error);
             await logOutAsync();
         } finally {
           setLoading(false);
         }
     };
 
-    const logInAsync = async (email: string, password: string): Promise<void> => {
-        const axios = await getAxios();
-        const response = await axios.post<LoginResponse>(Api.Routes.Login, { email, password });
-        console.log(response)
-        if(!response) {
-            return;
-        }
+    const logInAsync = async (response: LoginResponse): Promise<void> => {
         const _authData: AuthData = {
-            id: response.data.userId,
-            email: response.data.email,
-            role: response.data.role,
+            id: response.userId,
+            email: response.email,
+            role: response.role,
             firstName: "",
             lastName: "",
-            jwt: response.data.accessToken
+            jwt: response.accessToken
         };
         setAuthData(_authData);
         await secureStore.setItemAsync("AuthData", JSON.stringify(_authData));

@@ -1,7 +1,9 @@
+import { LoginResponse } from "./responses/LoginResponse";
+
 type AuthContextData = {
     authData?: AuthData;
     loading: boolean;
-    logInAsync(email: string, password: string): Promise<void>;
+    logInAsync(response: LoginResponse): Promise<void>;
     logOutAsync(): Promise<void>;
 };
       

@@ -36,7 +36,10 @@ export default function InstructorTabNavigator(){
               })} 
         >
             <Tab.Screen name="Home" component={InstructorView} ></Tab.Screen>
-            <Tab.Screen name="Student List" component={ManageStudents} ></Tab.Screen>
+            <Tab.Screen 
+              name="Student List" 
+              component={ManageStudents}
+            ></Tab.Screen>
             <Tab.Screen name="Add Students" component={AddStudentsForInstructor} ></Tab.Screen>
             <Tab.Screen name="Settings" component={Settings} ></Tab.Screen>
 
