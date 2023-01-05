@@ -1,32 +1,38 @@
 import { View, Text, Button, Alert, FlatList, TouchableOpacity } from "react-native";
 import { instructorStyle } from "../styles/InstructorStyle";
-import { getUserId, getJwt } from "../utils/AuthUtils";
 import { Api } from '../constants/constants';
 import { useEffect, useState } from "react";
+import { useAxios } from "../config/AxiosConfig";
+import { StudentResponse } from "../models/responses/StudentResponse";
+import { useAuth } from "./contexts/AuthProvider";
+import { formatString } from "../utils/StringUtils";
 import React from "react";
-import { getAxios } from "../config/AxiosConfig";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 const AddStudentsForInstructor = () => {
-    const [students, setStudents] = useState<string | undefined>("");
+    const { authData } = useAuth();
+    const axios = useAxios();
+
+    const [students, setStudents] = useState<StudentResponse[]>([]);
 
     useEffect(() => {
         getStudents()
     }, [])
-
     async function getStudents() {
-        const jwt = await getJwt();
-        const axios = await getAxios();
-        const response = await axios.get(Api.Routes.GetStudents, { headers: { 'Authorization': 'Bearer ' + jwt } })
-        setStudents(response.data)
+        const students = await axios.get<StudentResponse[]>(Api.Routes.Students, {
+            params: {
+                notAssignedToInstructors: authData.id
+            }
+        });
+        setStudents(students.data);
+        console.log(students)
     }
 
-    async function addStudent(studentId) {
-        const jwt = await getJwt();
-        const id = await getUserId();
-        const axios = await getAxios();
-        axios.post("/instructors/" + id + "/student", { studentId }, { headers: { 'Authorization': 'Bearer ' + jwt } })
+    async function addStudent(studentId: number) {
+        await axios.post(formatString(Api.Routes.AddStudentToInstructor, authData.id, studentId));
+        Alert.alert("Student successfully added!");
+        await getStudents();
     }
 
     return (

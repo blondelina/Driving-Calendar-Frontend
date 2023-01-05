@@ -4,10 +4,14 @@ import { Calendar } from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Api } from '../../constants/constants';
-import { getJwt, logout } from '../../utils/AuthUtils';
 import { instructorStyle } from '../../styles/InstructorStyle';
+import { useAxios } from '../../config/AxiosConfig';
+import { useAuth } from '../contexts/AuthProvider';
+import { formatString } from '../../utils/StringUtils';
 
 const InstructorView = ({ navigation }: { navigation: any }) => {
+  const axios = useAxios();
+  const { authData } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
@@ -17,25 +21,11 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
   const [pastMarkedDates, setPastMarkedDates] = useState({});
 
   async function postData() {
-    getJwt().then(result =>
-      fetch(Api.BaseURL + "/api/users/4/availabilities", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + result,
-          'accept': '*/*',
-        },
-        body: JSON.stringify({
-          "startDate": startDate,
-          "endDate": endDate,
-          "repeat": 0
-        })
-      }).then(response => response.json())
-        .then(response => console.log(response))
-        .catch(error => {
-          console.log(error.message);
-        })
-    )
+    await axios.post(formatString(Api.Routes.Availabilites, authData.id.toString()), {
+      startDate, 
+      endDate, 
+      repeat: 0}
+    );
   }
 
   function createDateRange(fStartDate: String, fEndDate: String) {
@@ -143,7 +133,11 @@ const InstructorView = ({ navigation }: { navigation: any }) => {
               formattedEndDate as String,
             )
             : pastMarkedDates
-        }></Calendar>
+        }
+        enableSwipeMonths={true}
+        onDayPress={day => {
+          console.log('selected day', day);
+        }}/>
 
       <View style={instructorStyle.buttonsViewStyle}>
         <Button

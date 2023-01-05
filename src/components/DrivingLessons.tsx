@@ -1,24 +1,24 @@
 import React, { useEffect } from "react"
 import { useState } from "react"
 import { View, Text, FlatList, TouchableOpacity } from "react-native"
-import { getAxios } from "../config/AxiosConfig"
+// import { getAxios } from "../config/AxiosConfig"
 import Status from "../constants/Status"
 import { instructorStyle } from "../styles/InstructorStyle"
-import { getJwt, getUserId } from "../utils/AuthUtils"
+// import { getJwt, getUserId } from "../utils/AuthUtils"
+import { useAxios } from "../config/AxiosConfig";
 
 const DrivingLessons = () => {
     const [lessons, setLessons] = useState<string | undefined>("")
     const [refresh, setRefresh] = useState<boolean>(false)
+    const axios = useAxios();
 
     useEffect(() => {
         getLessons()
     }, [refresh,])
 
     async function getLessons() {
-        const jwt = await getJwt();
-        const id = await getUserId();
-        const axios = await getAxios();
-        const response = await axios.get("/driving-lessons", { headers: { 'Authorization': 'Bearer ' + jwt } })
+        //axios.post(formatString(Api.Routes.AddStudentToInstructor, authData.id, studentId));
+        const response = await axios.get("/driving-lessons")
         setLessons(response.data)
     }
 

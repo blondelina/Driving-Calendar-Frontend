@@ -45,7 +45,6 @@ const instructorStyle = StyleSheet.create({
     },
     studentList: {
         display: 'flex',
-        justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
         height: '70%'
