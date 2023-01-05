@@ -17,7 +17,6 @@ const DrivingLessons = () => {
     }, [refresh,])
 
     async function getLessons() {
-        //axios.post(formatString(Api.Routes.AddStudentToInstructor, authData.id, studentId));
         const response = await axios.get("/driving-lessons")
         setLessons(response.data)
     }

@@ -14,26 +14,8 @@ export function useAxios(): AxiosInstance {
         instance.defaults.headers.common["Authorization"] = `Bearer ${authData.jwt}`;
     }
 
-    /*
-    instance.interceptors.response.use(response => response, async error => {
-        if(error.response.status === 401) {
-            await logOutAsync();
-            return;
-        }
-        if(error.response.status === 400) {
-            Alert.alert(error.response);
-            return;
-        }
-        throw new Error(error);
-    })
-    */
 
-    instance.interceptors.response.use(response => /*{ 
-        if(response.status === 200 && response.config.method === "post")
-        Alert.alert("Succesful!");
-        return response 
-    
-    }*/response,async error => {
+    instance.interceptors.response.use(response => response,async error => {
         if(error.response.status === 401) {
             await logOutAsync();
             return;
