@@ -46,7 +46,7 @@ const AuthProvider = ({children}) => {
         setAuthData(null);
         await secureStore.deleteItemAsync("AuthData");
     }
-
+    
     return (
         <AuthContext.Provider value={{authData, loading, logInAsync, logOutAsync}}>
           {children}

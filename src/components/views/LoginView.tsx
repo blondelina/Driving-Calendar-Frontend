@@ -6,7 +6,6 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
-  ScrollView
 } from 'react-native';
 
 import { loginStyle } from '../../styles/LoginStyles'

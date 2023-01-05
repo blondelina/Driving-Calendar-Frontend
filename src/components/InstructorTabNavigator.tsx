@@ -5,6 +5,7 @@ import InstructorView from './views/InstructorView';
 import React from 'react';
 import Settings from './Settings';
 import AddStudentsForInstructor from './AddStudentsForInstructor';
+import DrivingLessons from './DrivingLessons';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,6 +30,9 @@ export default function InstructorTabNavigator(){
                   else if (route.name === 'Settings') {
                     iconName = focused ? 'ios-settings' : 'ios-settings-outline';
                   }
+                  else if (route.name === 'Driving Lessons') {
+                    iconName = focused ? 'car' : 'car-outline';
+                  }
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
                 tabBarActiveTintColor: "#7464bc",
@@ -36,10 +40,8 @@ export default function InstructorTabNavigator(){
               })} 
         >
             <Tab.Screen name="Home" component={InstructorView} ></Tab.Screen>
-            <Tab.Screen 
-              name="Student List" 
-              component={ManageStudents}
-            ></Tab.Screen>
+            <Tab.Screen name="Driving Lessons" component={DrivingLessons} ></Tab.Screen>
+            <Tab.Screen name="Student List" component={ManageStudents} ></Tab.Screen>
             <Tab.Screen name="Add Students" component={AddStudentsForInstructor} ></Tab.Screen>
             <Tab.Screen name="Settings" component={Settings} ></Tab.Screen>
 

@@ -1,5 +1,5 @@
 const Api = {
-    BaseURL: "https://5749-2a02-2f0e-a0e-6100-d93c-ed8b-41c4-8b8a.eu.ngrok.io/api",
+    BaseURL: "https://f477-78-97-15-217.eu.ngrok.io/api",
     IdClaim: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
     RoleClaim: "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
     Routes: {

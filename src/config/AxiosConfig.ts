@@ -14,13 +14,14 @@ export function useAxios(): AxiosInstance {
         instance.defaults.headers.common["Authorization"] = `Bearer ${authData.jwt}`;
     }
 
-    instance.interceptors.response.use(response => response, async error => {
+
+    instance.interceptors.response.use(response => response,async error => {
         if(error.response.status === 401) {
             await logOutAsync();
             return;
         }
         if(error.response.status === 400) {
-            Alert.alert(error.response);
+            Alert.alert(error.response.data);
             return;
         }
         throw new Error(error);

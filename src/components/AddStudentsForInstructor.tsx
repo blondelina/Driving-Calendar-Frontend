@@ -1,4 +1,4 @@
-import React, { View, Text, Button, Alert, FlatList } from "react-native";
+import { View, Text, Button, Alert, FlatList, TouchableOpacity } from "react-native";
 import { instructorStyle } from "../styles/InstructorStyle";
 import { Api } from '../constants/constants';
 import { useEffect, useState } from "react";
@@ -6,6 +6,9 @@ import { useAxios } from "../config/AxiosConfig";
 import { StudentResponse } from "../models/responses/StudentResponse";
 import { useAuth } from "./contexts/AuthProvider";
 import { formatString } from "../utils/StringUtils";
+import React from "react";
+import Ionicons from '@expo/vector-icons/Ionicons';
+
 
 const AddStudentsForInstructor = () => {
     const { authData } = useAuth();
@@ -23,6 +26,7 @@ const AddStudentsForInstructor = () => {
             }
         });
         setStudents(students.data);
+        console.log(students)
     }
 
     async function addStudent(studentId: number) {
@@ -35,19 +39,21 @@ const AddStudentsForInstructor = () => {
         <View style={instructorStyle.instructorSearch}>
             <Text style={instructorStyle.headerStyle}>Add students:</Text>
             <FlatList
-                data={students}
-                renderItem={({ item }) => 
-                <View style={instructorStyle.studentElement}>
-                    <View style={instructorStyle.textContent}>
-                        <Text style={{padding:5}}><Text style={{fontWeight:'bold'}}>Username: </Text>{item.userName}</Text>
-                        <Text style={{padding:5}}><Text>Full name: </Text>{item.name}</Text>
+                data={students as any}
+                renderItem={({ item }) =>
+                    <View style={instructorStyle.studentElement}>
+                        <View style={instructorStyle.textContent}>
+                            <Text style={{ padding: 5 , width: 250}}><Text style={{ fontWeight: 'bold' }}>Username: </Text>{item['studentUserName']}</Text>
+                            <Text style={{ padding: 5 , width: 250}}><Text>Full name: </Text>{item['studentName']}</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => addStudent(item['studentId'])} style={{ backgroundColor: "#7464bc", borderRadius: 30, marginBottom: 20 }}>
+                            <Ionicons name="add" size={20} color={'white'} style={{ padding:10 }} />
+                        </TouchableOpacity>
                     </View>
-                    <Button title="Add" onPress={async () => await addStudent(item.id)} color={"#7464bc"}></Button>
-                </View>
-            }
-        />
-    </View>
-)
+                }
+            />
+        </View>
+    )
 }
 
 export default AddStudentsForInstructor;
