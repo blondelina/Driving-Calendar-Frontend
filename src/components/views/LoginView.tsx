@@ -6,14 +6,12 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
-  ScrollView
 } from 'react-native';
 
 import { loginStyle } from '../../styles/LoginStyles'
 import { Link } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../contexts/AuthProvider';
 
 const Login = () => {

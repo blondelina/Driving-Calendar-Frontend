@@ -11,13 +11,18 @@ export async function getAxios(jwt: string | null = null): Promise<AxiosInstance
         instance.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
     }
 
-    instance.interceptors.response.use(response => response, error => {
+    instance.interceptors.response.use(response => { 
+        if(response.status === 200 && response.config.method === "post")
+        Alert.alert("Succesful!");
+        return response 
+    
+    }, error => {
         if(error.response.status === 401) {
             Alert.alert("Wrong credentials");
             return;
         }
         if(error.response.status === 400) {
-            Alert.alert(error.response);
+            Alert.alert(error.response.data);
             return;
         }
         throw new Error(error);
