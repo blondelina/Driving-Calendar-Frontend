@@ -9,14 +9,14 @@ const loginStyle = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    height: '70%',
+    height: '100%',
   },
   register: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    height: '95%',
+    height: '100%',
   },
   textbox: {
     borderBottomColor: '#ccc',

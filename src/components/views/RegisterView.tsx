@@ -9,87 +9,96 @@ import {
   ImageBackground,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  KeyboardAvoidingView
 } from "react-native"
 import { loginStyle } from "../../styles/LoginStyles"
 import { Api } from '../../constants/constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useAxios } from "../../config/AxiosConfig";
 
 const Register = ({ navigation }: { navigation: any }) => {
+  const axios = useAxios();
   const [email, setEmail] = useState<string | undefined>("")
   const [username, setUsername] = useState<string | undefined>("")
   const [firstName, setFirstName] = useState<string | undefined>("")
   const [lastName, setLastName] = useState<string | undefined>("")
   const [password, setPassword] = useState<string | undefined>("")
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
 
   async function register() {
-    let response = await fetch(Api.BaseURL + '/students' + "/register", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': '*/*',
-      },
-      body: JSON.stringify({ "username": username, "email": email, "password": password, "firstName": firstName, "lastName": lastName })
+    const response = await axios.post(Api.Routes.StudentRegister, {
+      email, username, firstName, lastName, password
     });
-    let status = response.status
-    await response.json().then(response => {
-      console.log(response)
-      if (status === 400) {
-        if (response.errors != null)
-          Alert.alert(response.errors.Email[0])
-        else
-          Alert.alert(response[0].description)
-      }
-      else {
-        navigation.navigate("Login")
-        Alert.alert("Account created successfully!")
-      }
-    })
-  }
 
-  useEffect(() => {
-    if (username != "" && password != "" && email != "" && lastName != "" && firstName != "")
-      setButtonDisabled(false)
-    else
-      setButtonDisabled(true)
-  }, [username, password, email, lastName, firstName])
+    if(response.status === 201) {
+      navigation.navigate("Login");
+      Alert.alert("Account created successfully!")
+    }
+  }
 
   return (
     <SafeAreaView style={loginStyle.register}>
-      <ImageBackground source={require('../../styles/backgroundCar.png')} resizeMode='contain' style={{
-        flex: 1, height: 250,
-        width: 250, opacity: 0.2
-      }} />
-      <ScrollView>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <ImageBackground 
+          source={require('../../styles/backgroundCar.png')} 
+          resizeMode='contain' 
+          style={{
+            flex: 1, 
+            height: 250,
+            width: 250, 
+            opacity: 0.2
+        }}/>
         <Text style={loginStyle.loginHeader}>
           Sign up
         </Text>
 
         <View style={loginStyle.textbox}>
           <MaterialIcons name="email" size={20}></MaterialIcons>
-          <TextInput placeholder='Email' style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} keyboardType="email-address"></TextInput>
+          <TextInput 
+            placeholder='Email' 
+            style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} 
+            keyboardType="email-address"
+            autoCapitalize="none"
+            onChangeText={email => setEmail(email)}
+          />
         </View>
         <View style={loginStyle.textbox}>
           <MaterialIcons name="person" size={20}></MaterialIcons>
-          <TextInput placeholder='First Name' style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} keyboardType="email-address"></TextInput>
-          <TextInput placeholder='Surname' style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} keyboardType="email-address"></TextInput>
+          <TextInput 
+            placeholder='First Name' 
+            style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} 
+            onChangeText={x => setFirstName(x)}
+          />
+          <TextInput 
+            placeholder='Surname' 
+            style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} 
+            onChangeText={x => setLastName(x)}
+          />
         </View>
         <View style={loginStyle.textbox}>
           <MaterialIcons name="person" size={20}></MaterialIcons>
-          <TextInput placeholder='User' style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} keyboardType="email-address"></TextInput>
+          <TextInput 
+            placeholder='Username' 
+            style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }} 
+            autoCapitalize="none"
+            onChangeText={x => setUsername(x)}
+          />
         </View>
 
         <View style={loginStyle.textbox}>
           <MaterialIcons name="lock" size={20}></MaterialIcons>
           <TextInput
-            blurOnSubmit={false}
             placeholder='Password'
             style={{ flex: 1, paddingVertical: 0, paddingHorizontal: 5 }}
-            secureTextEntry>
-          </TextInput>
+            secureTextEntry
+            onChangeText={x => setPassword(x)}
+          />
         </View>
-        <TouchableOpacity onPress={() => register()} style={{ backgroundColor: '#795F80', borderRadius: 10, marginBottom: 20 }}>
+        <TouchableOpacity 
+          onPress={register} 
+          style={{ backgroundColor: '#795F80', borderRadius: 10, marginBottom: 20 }}
+        >
           <Text style={loginStyle.button}>Register</Text>
         </TouchableOpacity>
 
@@ -97,7 +106,7 @@ const Register = ({ navigation }: { navigation: any }) => {
           <Text style={{ paddingRight: 10 }}>Already have an account?</Text>
           <Link to={'/Login'} children={"Login here."} style={{ color: '#795F80' }}></Link>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   )
 }
