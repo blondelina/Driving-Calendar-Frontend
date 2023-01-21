@@ -1,153 +1,155 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, Button } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
-import { Api } from '../../constants/constants';
+import Octicons from 'react-native-vector-icons/Octicons';
 import { instructorStyle } from '../../styles/InstructorStyle';
 import { useAxios } from '../../config/AxiosConfig';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { RefreshControl, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
+import { DateData, MarkedDates } from 'react-native-calendars/src/types';
+import { DrivingLessonResponse } from '../../models/responses/DrivingLessonResponse';
+import { DateTime } from 'luxon';
+import { Api } from '../../constants/constants';
+import { DrivingLessonsParams } from '../../models/requests/DrivingLessonsParams';
 import { useAuth } from '../contexts/AuthProvider';
+import DrivingLessonCard from '../cards/DrivingLessonCard';
+import AddDrivingLessonModal from '../modals/AddDrivingLessonModal';
 import { formatString } from '../../utils/StringUtils';
+import { StudentResponse } from '../../models/responses/StudentResponse';
 
-const InstructorView = ({ navigation }: { navigation: any }) => {
+const InstructorView = () => {
   const axios = useAxios();
   const { authData } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<DateTime | null>(null);
+  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
+  const [drivingLessons, setDrivingLessons] = useState<DrivingLessonResponse[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
-  const [formattedEndDate, setFormattedEndDate] = useState<String>();
-  const [formattedStartDate, setFormattedStartDate] = useState<String>();
-  const [changePeriodOk, setChangePeriodOk] = useState(false);
-  const [pastMarkedDates, setPastMarkedDates] = useState({});
 
-  async function postData() {
-    await axios.post(formatString(Api.Routes.Availabilites, authData.id.toString()), {
-      startDate, 
-      endDate, 
-      repeat: 0}
-    );
-  }
-
-  function createDateRange(fStartDate: String, fEndDate: String) {
-    const dateRange = {
-      [fStartDate as string]: {
-        selected: true,
-        startingDay: true,
-        color: 'green',
-      },
-      [fEndDate as string]: { selected: true, endingDay: true, color: 'green' },
-    };
-    if (fStartDate && fEndDate) {
-      let start = moment(fStartDate as string)
-        .startOf('day')
-        .add(1, 'days');
-      const end = moment(fEndDate as string).startOf('day');
-      while (end.isAfter(start)) {
-        Object.assign(dateRange, {
-          [start.format('YYYY-MM-DD')]: { selected: true, color: 'green' },
-        });
-        start = start.add(1, 'days');
-      }
+  useEffect(() => {
+    if(!selectedDate) {
+      setMarkedDates({});
+      return;
     }
-    setPastMarkedDates(dateRange);
-    setChangePeriodOk(false);
-    return dateRange;
+    loadDrivingLessons(selectedDate);
+    
+    const markedDates = {} as MarkedDates;
+    markedDates[selectedDate.toFormat('yyyy-MM-dd')] = {
+      selected: true,
+      selectedColor: "#7464bc"
+    };
+    setMarkedDates(markedDates);
+  }, [selectedDate]);
+
+  const onRefresh = async () => {
+    if(refreshing) {
+      return;
+    }
+    
+    setRefreshing(true);
+    if(selectedDate) {
+      loadDrivingLessons(selectedDate);
+    }
+    setRefreshing(false);
   }
 
-  useEffect(() => {
-    var changedDate = '';
-    changedDate = startDate.getFullYear().toString() + '-';
-    if (startDate.getMonth() + 1 < 10)
-      changedDate =
-        changedDate + '0' + (startDate.getMonth() + 1).toString() + '-';
-    else
-      changedDate = changedDate + (startDate.getMonth() + 1).toString() + '-';
-    if (startDate.getDate() < 10)
-      changedDate = changedDate + '0' + startDate.getDate().toString();
-    else changedDate = changedDate + startDate.getDate().toString();
-    setFormattedStartDate(changedDate);
-  }, [, startDate]);
+  const loadDrivingLessons = (selectedDate: DateTime): void => {
+    axios.get<DrivingLessonResponse[]>(formatString(Api.Routes.InstructorDrivingLessons, authData.id), {
+      params: {
+        instructorId: authData.id,
+        startDate: selectedDate,
+        endDate: selectedDate.endOf('day')
+      } as DrivingLessonsParams
+    })
+    .then(response => {
+      if(response) {
+        setDrivingLessons(response.data);
+      }
+    })
+    .catch(e => {
+      Alert.alert("Something went wrong");
+      console.error(e);
+    });
+  }
 
-  useEffect(() => {
-    var changedDate = '';
-    changedDate = endDate.getFullYear().toString() + '-';
-    if (endDate.getMonth() + 1 < 10)
-      changedDate =
-        changedDate + '0' + (endDate.getMonth() + 1).toString() + '-';
-    else changedDate = changedDate + (endDate.getMonth() + 1).toString() + '-';
-    if (endDate.getDate() < 10)
-      changedDate = changedDate + '0' + endDate.getDate().toString();
-    else changedDate = changedDate + endDate.getDate().toString();
-    setFormattedEndDate(changedDate);
-  }, [, endDate]);
+  const onSelectDate = (date: DateData): void => {
+    setSelectedDate(DateTime.fromISO(date.dateString).startOf('day'));
+  }
+
+  const onDeletedDrivingLesson = (drivingLesson: DrivingLessonResponse) => {
+    setDrivingLessons(drivingLessons.filter(dl => dl.id != drivingLesson.id));
+  }
+
+  const onCreatedDrivingLesson = (drivingLesson: DrivingLessonResponse) => {
+    if(DateTime.fromISO(drivingLesson.startDate).startOf('day') !== selectedDate.startOf('day')) {
+      return;
+    }
+
+    setDrivingLessons([...drivingLessons, drivingLesson]);
+  }
+
+  const renderDrivingLessonsView = (): JSX.Element => {
+    if(!selectedDate) {
+      return (
+        <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Select a day to see lessons</Text>
+        </View>);
+    }
+
+    if(drivingLessons.length) {
+      return (
+      <>
+        {drivingLessons.sort((a, b) => a.startDate <= b.startDate ? -1 : 1)
+                       .map(dl => <DrivingLessonCard key={dl.id.toString() + dl.status} drivingLessonResponse={dl} deleteCallback={onDeletedDrivingLesson}/>)}
+      </>
+      )
+    }
+
+    return (
+      <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Text>No driving lessons for that day</Text>
+      </View>
+    );
+    
+  }
 
   return (
-    <View>
-      <Modal
-        animationType="fade"
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(!modalVisible)}>
-        <View style={instructorStyle.instructorView}>
-          <Text>Pick start date and time.</Text>
-          <DateTimePicker
-            value={startDate}
-            onChange={e => {
-              console.log(e);
-            }}
-            textColor="#000000"
+    <SafeAreaView style={{ height: "100%" }}>
+      <AddDrivingLessonModal 
+        modalVisible={modalVisible} 
+        setModalVisible={setModalVisible}/>
+      <ScrollView
+        contentContainerStyle = {{ alignItems: 'stretch'}}
+        refreshControl={
+          <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
           />
-          <Text>Pick end date and time.</Text>
-          <DateTimePicker
-            value={endDate}
-            onChange={date => {
-              console.log(date)
-            }}
-            textColor="#000000"
-          />
-          <Button
-            title="Submit"
-            onPress={() => {
-              startDate.setHours(startDate.getHours() - (startDate.getTimezoneOffset() / 60))
-              endDate.setHours(endDate.getHours() - (endDate.getTimezoneOffset() / 60))
-              postData()
-              setModalVisible(!modalVisible);
-              setChangePeriodOk(true);
-            }}
-          />
-          <Button
-            title="Cancel"
-            onPress={() => {
-              setModalVisible(!modalVisible);
-              setChangePeriodOk(false);
-            }}
-          />
+      }
+      >
+        <View style={{marginLeft: 'auto', marginRight: 0, justifyContent: 'center', alignItems: 'center'}}>
+          <TouchableHighlight 
+            style={instructorStyle.confirmButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <Text style={{fontSize: 15, color: 'white'}}>New lesson </Text>
+              <Octicons name={'plus'} size={15} color={'white'}/>
+            </View>
+          </TouchableHighlight>
         </View>
-      </Modal>
-      <Calendar
-        style={instructorStyle.calendarStyle}
-        markingType={'period'}
-        markedDates={
-          changePeriodOk
-            ? createDateRange(
-              formattedStartDate as String,
-              formattedEndDate as String,
-            )
-            : pastMarkedDates
-        }
-        enableSwipeMonths={true}
-        onDayPress={day => {
-          console.log('selected day', day);
-        }}/>
-
-      <View style={instructorStyle.buttonsViewStyle}>
-        <Button
-          color={"#7464bc"}
-          title="Manage schedule"
-          onPress={() => setModalVisible(!modalVisible)}
+        
+        <Calendar
+          markedDates={markedDates}
+          onDayPress={onSelectDate}
+          onMonthChange={() => setSelectedDate(null)}
+          firstDay={1}
         />
-      </View>
-
-    </View>
+        <View style={{ width: '100%', height: '100%' }}>
+          {renderDrivingLessonsView()}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

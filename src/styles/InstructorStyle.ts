@@ -17,9 +17,6 @@ const instructorStyle = StyleSheet.create({
         alignItems: 'center',
         height: '50%'
     },
-    calendarStyle: {
-        marginTop: '10%'
-    },
     signOutStyle: {
         marginTop: '5%',
         display: 'flex',
@@ -73,11 +70,33 @@ const instructorStyle = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 15,
-        margin: 5,
-        borderRadius: 15,
+        padding: 10,
+        alignSelf: 'center',
+        marginTop: 10,
+        width: '97%',
         backgroundColor: 'white',
         shadowColor: "#000",
+        borderRadius: 5,
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 0.3,
+        
+        elevation: 1,
+    },
+    studentCard:{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        alignSelf: 'center',
+        marginTop: 10,
+        width: '97%',
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        borderRadius: 7,
         shadowOffset: {
             width: 0,
             height: 1,
@@ -88,19 +107,26 @@ const instructorStyle = StyleSheet.create({
         elevation: 1,
     },
     textContent: {
-        display: 'flex',
-        flexDirection: 'column',
+    
     },
     headerStyle: {
         fontSize: 20,
         fontWeight: 'bold',
-        padding: 20
+        paddingTop: 40,
+        padding: 20,
+        textAlign: 'center'
     },
     button: {
         padding: 10,
         width: 80,
         textAlign: 'center',
         color: "white"
+    },
+    confirmButton: {
+        padding: '3%', 
+        backgroundColor: '#7464bc', 
+        margin: '3%', 
+        borderRadius: 4
     },
     dateButton: {
         padding: 10,
@@ -165,22 +191,13 @@ const instructorStyle = StyleSheet.create({
         height: '80%'
     },
     Pending:{
-        padding: 5, 
-        backgroundColor: "#FFD580",
-        borderRadius: 7,
-        width: 150
+        color: "#f5c242"
     },
     Confirmed:{
-        padding: 5, 
-        backgroundColor: "#99e599",
-        borderRadius: 7,
-        width: 150
+        color: "#99e599"
     },
     Rejected:{
-        padding: 5, 
-        backgroundColor: "#D2686E",
-        borderRadius: 7,
-        width: 150
+        color: "#D2686E"
     }
 });
 

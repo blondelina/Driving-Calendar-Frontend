@@ -10,16 +10,11 @@ import { Roles } from '../../constants/constants';
 import StudentView from "../views/StudentView";
 import InstructorTabNavigator from "../InstructorTabNavigator";
 import Settings from "../Settings";
-import Loading from "../Loading";
 
 const Stack = createNativeStackNavigator();
 
 export const Router = () => {
   const { authData, loading } = useAuth();
-
-  if(loading) {
-    return <Loading />;
-  }
 
   const renderStack = () => {
     if(!authData?.jwt) {

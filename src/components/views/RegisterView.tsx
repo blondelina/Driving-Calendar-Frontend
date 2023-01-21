@@ -31,7 +31,7 @@ const Register = ({ navigation }: { navigation: any }) => {
       email, username, firstName, lastName, password
     });
 
-    if(response.status === 201) {
+    if(response) {
       navigation.navigate("Login");
       Alert.alert("Account created successfully!")
     }

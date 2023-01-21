@@ -1,11 +1,9 @@
-import ManageStudents from './EnrolledStudents';
+import ManageStudents from './views/EnrolledStudentsView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import InstructorView from './views/InstructorView';
 import React from 'react';
 import Settings from './Settings';
-import AddStudentsForInstructor from './AddStudentsForInstructor';
-import DrivingLessons from './DrivingLessons';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,11 +38,8 @@ export default function InstructorTabNavigator(){
               })} 
         >
             <Tab.Screen name="Home" component={InstructorView} ></Tab.Screen>
-            <Tab.Screen name="Driving Lessons" component={DrivingLessons} ></Tab.Screen>
             <Tab.Screen name="Student List" component={ManageStudents} ></Tab.Screen>
-            <Tab.Screen name="Add Students" component={AddStudentsForInstructor} ></Tab.Screen>
             <Tab.Screen name="Settings" component={Settings} ></Tab.Screen>
-
         </Tab.Navigator>
     )
 }

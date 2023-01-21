@@ -6,6 +6,7 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 
 import { loginStyle } from '../../styles/LoginStyles'
@@ -26,6 +27,12 @@ const Login = () => {
 
   async function login() {
     const response = await axios.post<LoginResponse>(Api.Routes.Login, { email, password });
+    
+    if(!response) {
+      Alert.alert("Username or password is invalid");
+      return;
+    }
+
     await logInAsync(response.data);
   }
 

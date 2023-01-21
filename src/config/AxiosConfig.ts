@@ -15,9 +15,11 @@ export function useAxios(): AxiosInstance {
     }
 
 
-    instance.interceptors.response.use(response => response,async error => {
+    instance.interceptors.response.use(response => response, async error => {
         if(error.response.status === 401) {
-            await logOutAsync();
+            if(authData?.jwt) {
+                await logOutAsync();
+            }
             return;
         }
         if(error.response.status === 400) {
