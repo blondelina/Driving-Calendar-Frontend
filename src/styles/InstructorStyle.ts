@@ -89,7 +89,6 @@ const instructorStyle = StyleSheet.create({
     studentCard:{
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
         padding: 10,
         alignSelf: 'center',
         marginTop: 10,
@@ -108,13 +107,6 @@ const instructorStyle = StyleSheet.create({
     },
     textContent: {
     
-    },
-    headerStyle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        paddingTop: 40,
-        padding: 20,
-        textAlign: 'center'
     },
     button: {
         padding: 10,

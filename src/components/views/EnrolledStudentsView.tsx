@@ -13,6 +13,7 @@ import { instructorStyle } from "../../styles/InstructorStyle";
 import AddStudentModal from "../modals/AddStudentModal";
 import { SearchBar } from "react-native-elements";
 import { GetStudentParams } from "../../models/requests/GetStudentsParams";
+import { mainStyles } from "../../styles/MainStyles";
 
 const EnrolledStudents = () => {
     const { authData } = useAuth();
@@ -53,15 +54,15 @@ const EnrolledStudents = () => {
     }, [searchQuery]);
 
     const onRefresh = async () => {
-        if(refreshing) {
-          return;
-        }
-        
-        setRefreshing(true);
+      if(refreshing) {
+        return;
+      }
+      
+      setRefreshing(true);
 
-        const response = await axios.get<StudentResponse[]>(formatString(Api.Routes.GetInstructorStudents, authData.id));
-        setStudents(response.data);
-        setRefreshing(false);
+      const response = await axios.get<StudentResponse[]>(formatString(Api.Routes.GetInstructorStudents, authData.id));
+      setStudents(response.data);
+      setRefreshing(false);
     }
 
     const onDeletedStudent = (student: StudentResponse) => {
@@ -95,7 +96,7 @@ const EnrolledStudents = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={mainStyles.container}>
           <AddStudentModal 
             modalVisible={modalVisible} 
             setModalVisible={setModalVisible}
@@ -125,7 +126,7 @@ const EnrolledStudents = () => {
               platform='ios'
               containerStyle={{backgroundColor: 'transparent'}}
             />
-            <Text style={instructorStyle.headerStyle}>Students: </Text>
+            <Text style={[mainStyles.headerStyle, { textAlign: 'center' }]}>Students: </Text>
               {renderStudents()}
           </ScrollView>
         </SafeAreaView>

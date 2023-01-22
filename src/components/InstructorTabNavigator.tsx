@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import InstructorView from './views/InstructorView';
 import React from 'react';
-import Settings from './Settings';
+import SettingsView from './views/SettingsView';
 
 const Tab = createBottomTabNavigator();
 
@@ -11,37 +11,39 @@ export default function InstructorTabNavigator(){
     return(
         <Tab.Navigator
             initialRouteName='Instructor'
-            screenOptions={({ route }) => ({
+            screenOptions={() => ({
                 headerShown: false,
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
-      
-                  if (route.name === 'Home') {
-                    iconName = focused
-                      ? 'ios-home'
-                      : 'ios-home-outline';
-                  } else if (route.name === 'Student List') {
-                    iconName = focused ? 'ios-list' : 'ios-list-outline';
-                  } else if (route.name === 'Add Students') {
-                    iconName = focused ? 'add-circle' : 'add-circle-outline';
-                  }
-                  else if (route.name === 'Settings') {
-                    iconName = focused ? 'ios-settings' : 'ios-settings-outline';
-                  }
-                  else if (route.name === 'Driving Lessons') {
-                    iconName = focused ? 'car' : 'car-outline';
-                  }
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
                 tabBarActiveTintColor: "#7464bc",
                 tabBarInactiveTintColor: 'gray',
               })} 
         >
-            <Tab.Screen name="Home" component={InstructorView} ></Tab.Screen>
-            <Tab.Screen name="Student List" component={ManageStudents} ></Tab.Screen>
-            <Tab.Screen name="Settings" component={Settings} ></Tab.Screen>
+            <Tab.Screen 
+              name="Home" 
+              component={InstructorView}
+              options={{
+                tabBarIcon: ({focused, color, size}) => {
+                  const iconName = focused ? 'ios-home' : 'ios-home-outline';
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                }
+              }}/>
+            <Tab.Screen 
+              name="Student List" 
+              component={ManageStudents}
+              options={{
+                tabBarIcon: ({focused, color, size}) => {
+                  const iconName = focused ? 'ios-list' : 'ios-list-outline';
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                }
+              }}/>
+            <Tab.Screen 
+              name="Settings" 
+              component={SettingsView} 
+              options={{
+                tabBarIcon: ({focused, color, size}) => {
+                  const iconName = focused ? 'ios-settings' : 'ios-settings-outline';
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                }
+              }}/>
         </Tab.Navigator>
     )
 }
-
-

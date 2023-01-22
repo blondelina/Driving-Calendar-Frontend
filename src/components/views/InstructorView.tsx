@@ -10,12 +10,11 @@ import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { DrivingLessonResponse } from '../../models/responses/DrivingLessonResponse';
 import { DateTime } from 'luxon';
 import { Api } from '../../constants/constants';
-import { DrivingLessonsParams } from '../../models/requests/DrivingLessonsParams';
+import { InstructorDrivingLessonsParams } from '../../models/requests/InstructorDrivingLessonsParams';
 import { useAuth } from '../contexts/AuthProvider';
 import DrivingLessonCard from '../cards/DrivingLessonCard';
 import AddDrivingLessonModal from '../modals/AddDrivingLessonModal';
 import { formatString } from '../../utils/StringUtils';
-import { StudentResponse } from '../../models/responses/StudentResponse';
 
 const InstructorView = () => {
   const axios = useAxios();
@@ -56,10 +55,9 @@ const InstructorView = () => {
   const loadDrivingLessons = (selectedDate: DateTime): void => {
     axios.get<DrivingLessonResponse[]>(formatString(Api.Routes.InstructorDrivingLessons, authData.id), {
       params: {
-        instructorId: authData.id,
         startDate: selectedDate,
         endDate: selectedDate.endOf('day')
-      } as DrivingLessonsParams
+      } as InstructorDrivingLessonsParams
     })
     .then(response => {
       if(response) {
@@ -117,7 +115,9 @@ const InstructorView = () => {
     <SafeAreaView style={{ height: "100%" }}>
       <AddDrivingLessonModal 
         modalVisible={modalVisible} 
-        setModalVisible={setModalVisible}/>
+        setModalVisible={setModalVisible}
+        createCallback={onCreatedDrivingLesson}
+        initialDate={selectedDate}/>
       <ScrollView
         contentContainerStyle = {{ alignItems: 'stretch'}}
         refreshControl={

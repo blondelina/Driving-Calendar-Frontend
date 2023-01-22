@@ -1,7 +1,4 @@
-import {
-  DatePickerAndroid,
-  StyleSheet
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const loginStyle = StyleSheet.create({
   login: {

@@ -13,6 +13,10 @@ const Api = {
         InstructorDrivingLessons: "instructors/{0}/driving-lessons",
         DeleteDrivingLesson: "driving-lessons/{0}",
         CreateDrivingLesson: "instructors/{0}/driving-lessons",
+        StudentDrivingLessons: "students/{0}/driving-lessons",
+        StudentPatchDrivingLesson: "driving-lessons/{0}",
+        StudentDetails: "students/{0}/details",
+        UpdateExamDate: "students/{0}/exam-date"
     }
 };
 

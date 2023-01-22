@@ -22,7 +22,7 @@ const AuthProvider = ({children}) => {
             setAuthData(_authData);
           }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             await logOutAsync();
         } finally {
           setLoading(false);

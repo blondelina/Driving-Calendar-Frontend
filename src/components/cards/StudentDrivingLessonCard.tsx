@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Animated, View, Text, StyleSheet, Alert } from "react-native";
 import { RectButton, Swipeable } from "react-native-gesture-handler";
 import { instructorStyle } from "../../styles/InstructorStyle";
 import { useAxios } from "../../config/AxiosConfig";
 import { formatString } from "../../utils/StringUtils";
 import { Api } from "../../constants/constants";
-import { StudentResponse } from "../../models/responses/StudentResponse";
 import { useAuth } from "../contexts/AuthProvider";
+import { StudentDetailResponse } from "../../models/responses/StudentDetailResponse";
+import { DateTime } from "luxon";
+import { StudentResponse } from "../../models/responses/StudentResponse";
 
 const StudentDrivingLessonCard = ({ student, deleteCallback }: { student: StudentResponse, deleteCallback?: (_: StudentResponse) => void }) => {
   const axios = useAxios();
   const { authData } = useAuth();
+
+  const [studentDetails, setStudentDetails] = useState({} as StudentDetailResponse);
+  useEffect(() => {
+    axios.get<StudentDetailResponse>(formatString(Api.Routes.StudentDetails, student.id))
+         .then(response => {
+          if(response) {
+            setStudentDetails(response.data);
+          }
+         })
+         .catch(error => console.error(error));
+  }, [student]);
 
   const renderRightAction = (text: string, color: string, x: number, progress, action: () => void) => {
     const trans = progress.interpolate({
@@ -27,15 +40,11 @@ const StudentDrivingLessonCard = ({ student, deleteCallback }: { student: Studen
   };
 
   const renderRightActions = (progress) => (
-    <View style={{ width: '50%', flexDirection: 'row' }}>
-      {renderRightAction('View student', '#40ab30', 128, progress, showStudentDrivingLessons)}
-      {renderRightAction('Delete', '#dd2c00', 128, progress, popUpDeleteDrivingLesson)}
+    <View style={{ width: '20%', flexDirection: 'row' }}>
+      {renderRightAction('Delete', '#dd2c00', 0, progress, popUpDeleteDrivingLesson)}
     </View>
   );
 
-  const showStudentDrivingLessons = () => {
-    console.log("Show student driving lessons");
-  }
 
   const deleteStudentFromInstructor = async () => {
     try {
@@ -68,6 +77,12 @@ const StudentDrivingLessonCard = ({ student, deleteCallback }: { student: Studen
           <View style={{ marginTop: 5}}>
             <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>
               {student.name}
+            </Text>
+            <Text style={{ marginBottom: 5 }}>
+              {"Exam date: "}
+              <Text style={{ fontWeight: 'bold' }}>
+                {studentDetails.examDate ? DateTime.fromISO(studentDetails.examDate).toFormat("yyyy MMM dd") : "Not fixed"}
+              </Text>
             </Text>
           </View>
         </View>

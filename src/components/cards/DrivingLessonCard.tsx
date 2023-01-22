@@ -12,13 +12,11 @@ import { Status } from "../../models/enums/Status";
 
 const DrivingLessonCard = ({ drivingLessonResponse, deleteCallback }: { drivingLessonResponse: DrivingLessonResponse, deleteCallback?: (_: DrivingLessonResponse) => void }) => {
   const axios = useAxios();
-  console.log(drivingLessonResponse.status);
+  
   const [drivingLesson] = useState({
     id: drivingLessonResponse.id,
-    instructorId: drivingLessonResponse.instructorId,
-    studentId: drivingLessonResponse.studentId,
-    instructorName: drivingLessonResponse.instructorName,
-    studentName: drivingLessonResponse.studentName,
+    student: drivingLessonResponse.student,
+    instructor: drivingLessonResponse.instructor,
     startDate: DateTime.fromISO(drivingLessonResponse.startDate),
     endDate: DateTime.fromISO(drivingLessonResponse.endDate),
     status: drivingLessonResponse.status
@@ -46,7 +44,6 @@ const DrivingLessonCard = ({ drivingLessonResponse, deleteCallback }: { drivingL
   );
 
   const showStudentDrivingLessons = () => {
-    console.log("Show student driving lessons");
   }
 
   const deleteDrivingLesson = async () => {
@@ -82,7 +79,7 @@ const DrivingLessonCard = ({ drivingLessonResponse, deleteCallback }: { drivingL
             { opacity: drivingLesson.endDate >= DateTime.now() ? 1 : 0.5 }]}>
           <View style={{ marginTop: 5}}>
             <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>
-              {drivingLesson.studentName}
+              {drivingLesson.student.name}
             </Text>
             <Text style={{...instructorStyle[drivingLesson.status], fontWeight: 'bold'}}>
                 {drivingLesson.status == Status.Confirmed && drivingLesson.endDate < DateTime.now() ? 'Completed' : drivingLesson.status}

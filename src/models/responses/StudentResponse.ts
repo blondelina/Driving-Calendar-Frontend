@@ -1,6 +1,6 @@
 export type StudentResponse = {
     id: number,
-    userName: string,
+    username: string,
     name: string,
     email: string
 };

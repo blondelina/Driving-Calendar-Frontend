@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, StyleSheet, Alert } from 'react-native';
 import DropDownPicker, { ItemType, ValueType } from 'react-native-dropdown-picker';
-import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useAxios } from '../../config/AxiosConfig';
 import { Api } from '../../constants/constants';
 import { StudentResponse } from '../../models/responses/StudentResponse';
@@ -13,16 +13,26 @@ import { DateTime } from 'luxon';
 import { CreateDrivingLesson } from '../../models/requests/CreateDrivingLesson';
 import { DrivingLessonResponse } from '../../models/responses/DrivingLessonResponse';
 
-const AddDrivingLessonModal = ({ modalVisible, setModalVisible, createCallback } : { modalVisible: boolean, setModalVisible: (arg0: boolean) => void, createCallback?: (arg0: DrivingLessonResponse) => void })  => {
+const AddDrivingLessonModal = ({ modalVisible, setModalVisible, createCallback, initialDate } : 
+{ 
+    modalVisible: boolean, 
+    setModalVisible: (arg0: boolean) => void, 
+    createCallback?: (arg0: DrivingLessonResponse) => void,
+    initialDate?: DateTime
+})  => {
     const axios = useAxios();
     const { authData } = useAuth();
     const [openDropdown, setOpenDropdown] = useState(false);
     const [studentId, setStudentId] = useState<number | null>(null);
     const [students, setStudents] = useState<StudentResponse[]>([]);
 
-    const now = DateTime.now();
-    const [startDate, setStartDate] = useState<DateTime | null>(DateTime.local(now.year, now.month, now.day, 8));
-    const [endDate, setEndDate] = useState<DateTime | null>(DateTime.local(now.year, now.month, now.day, 10));
+    const [startDate, setStartDate] = useState<DateTime>(DateTime.now());
+    const [endDate, setEndDate] = useState<DateTime>(DateTime.now());
+    useEffect(() => {
+        const date = initialDate || DateTime.now();
+        setStartDate(DateTime.local(date.year, date.month, date.day, 8));
+        setEndDate(DateTime.local(date.year, date.month, date.day, 8));
+    }, [,initialDate]);
 
     useEffect(() => {
         if(!modalVisible) {
@@ -140,5 +150,6 @@ const styles = StyleSheet.create({
     modalText: {
       marginBottom: 15,
       textAlign: 'center',
+      fontWeight: 'bold'
     },
   });
